@@ -1,6 +1,9 @@
 package channels
 
-import "time"
+import (
+	"github.com/tidwall/gjson"
+	"time"
+)
 
 const AlipayType = "alipay"
 
@@ -18,6 +21,6 @@ func (*AliReq) GetPayResult() PayResult {
 		NotifyTime:  time.Now()}
 }
 
-//func DecodeRequest(ctx []byte)  {
-//
-//}
+func DecodeRequest(ctx []byte) gjson.Result {
+
+}

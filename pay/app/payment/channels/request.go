@@ -16,7 +16,7 @@ type PayReq interface {
 }
 
 //请求转换到相应的渠道
-func RequestTransfer(r *http.Request) (PayReq,error) {
+func RequestTransfer(r *http.Request) (PayReq, error) {
 	content,err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil,errors.New("illegal request,request body err")
