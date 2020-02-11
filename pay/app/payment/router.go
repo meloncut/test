@@ -2,7 +2,7 @@ package payment
 
 import (
 	"github.com/go-chi/chi"
-	"meloncut/test/pay/app/payment/https"
+	"test/pay/app/payment/https"
 )
 
 func Routes() *chi.Mux {

@@ -1,4 +1,4 @@
-module meloncut/test/pay
+module test/pay
 
 go 1.12
 

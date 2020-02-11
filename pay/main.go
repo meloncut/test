@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/go-chi/chi"
-	"meloncut/test/pay/app/payment"
 	"net/http"
+	"test/pay/app/payment"
 )
 
 const HttpServerPort = ":8080"

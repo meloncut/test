@@ -1,9 +1,9 @@
 package https
 
 import (
-	//"meloncut/test/pay/app/payment/channels"
-	"meloncut/test/pay/app/payment/channels"
 	"net/http"
+	//"meloncut/test/pay/app/payment/channels"
+	"test/pay/app/payment/channels"
 )
 
 type NotifyReq interface {
