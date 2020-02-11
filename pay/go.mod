@@ -1,8 +1,5 @@
-module meloncut/project
+module meloncut/test/pay
 
 go 1.12
 
-require (
-	github.com/go-chi/chi v4.0.3+incompatible
-	github.com/tidwall/gjson v1.4.0
-)
+require github.com/go-chi/chi v4.0.3+incompatible
