@@ -24,11 +24,12 @@ func RequestTransfer(r *http.Request) (PayReq,error) {
 	//辨别支付渠道,返回相应的request
 	switch r.Header.Get("Content-Type") {
 		case ContentXML:{
-			req := AliReq{Content:content}
+			req := &AliReq{Content:content}
 			return req,nil
 		}
 		case ContentJson:{
-			break
+			req := &WxReq{Content:content}
+			return req,nil
 		}
 		default:{
 			return nil,errors.New("illegal request, unknown payment channel")

@@ -8,7 +8,7 @@ const WxPayType = "wxpay"
 
 //implement PayReq
 type WxReq struct {
-	content string //测试
+	Content []byte //测试
 }
 
 func (*WxReq) GetPayResult() PayResult {
