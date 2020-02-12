@@ -11,13 +11,13 @@ const (
 
 //财富账户
 type WealthAccount struct {
-	ID int64
-	WealthName string
-	WealthType string
-	UserId int64
-	Amount int64
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID int64 `db:"id"`
+	WealthName string `db:"wealth_name"`
+	WealthType string `db:"wealth_type"`
+	UserId int64 `db:"user_id"`
+	Amount int64 `db:"amount"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }
 
 type WealthLog struct {

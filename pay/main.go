@@ -1,9 +1,11 @@
 package main
 
 import (
+	"flag"
 	"github.com/go-chi/chi"
 	"net/http"
 	"test/pay/app/payment"
+	"test/pay/app/payment/conf"
 )
 
 const HttpServerPort = ":8080"
@@ -13,9 +15,16 @@ func main()  {
 }
 
 func ServerStart()  {
-	println("go server hello")
+	flag.StringVar(&conf.ConfigPath, "conf", "config.json", "Set the config file path.")
+	println(conf.ConfigPath)
+	err := conf.Load()
 
-	err := http.ListenAndServe(HttpServerPort, RegisterRoute())
+	if err != nil {
+		println("service config load failed")
+		return
+	}
+	println("go server hello")
+	err = http.ListenAndServe(HttpServerPort, RegisterRoute())
 
 	if err != nil {
 		println("http server start error")

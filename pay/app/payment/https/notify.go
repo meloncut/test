@@ -15,6 +15,7 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte(err.Error()))
+		return
 	}
 
 	payResult := payReq.GetPayResult()

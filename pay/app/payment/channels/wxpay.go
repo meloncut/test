@@ -1,7 +1,7 @@
 package channels
 
 import (
-	"time"
+"time"
 )
 
 const WxPayType = "wxpay"

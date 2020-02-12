@@ -1,7 +1,6 @@
 package channels
 
 import (
-	"github.com/tidwall/gjson"
 	"time"
 )
 
@@ -21,6 +20,6 @@ func (*AliReq) GetPayResult() PayResult {
 		NotifyTime:  time.Now()}
 }
 
-func DecodeRequest(ctx []byte) gjson.Result {
-
-}
+//func DecodeRequest(ctx []byte) gjson.Result {
+//
+//}

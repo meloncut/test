@@ -1,8 +1,5 @@
 # github.com/go-chi/chi v4.0.3+incompatible
 github.com/go-chi/chi
-# github.com/tidwall/gjson v1.4.0
-github.com/tidwall/gjson
-# github.com/tidwall/match v1.0.1
-github.com/tidwall/match
-# github.com/tidwall/pretty v1.0.0
-github.com/tidwall/pretty
+# github.com/jmoiron/sqlx v1.2.0
+github.com/jmoiron/sqlx
+github.com/jmoiron/sqlx/reflectx
