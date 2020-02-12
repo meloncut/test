@@ -1,6 +1,7 @@
 package daos
 
 import (
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"test/pay/app/payment/conf"
 )
@@ -8,7 +9,6 @@ import (
 var PayDB *Dao
 
 type Dao struct {
-	c *conf.MySQL
 	db *sqlx.DB
 }
 
@@ -23,7 +23,6 @@ func New(c *conf.Config) (dao *Dao) {
 	sqlxDB.SetMaxOpenConns(100)
 	
 	dao = &Dao{
-		c: c,
 		db:sqlxDB,
 	}
 	return

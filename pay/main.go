@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"test/pay/app/payment"
 	"test/pay/app/payment/conf"
+	"test/pay/app/payment/service"
 )
 
 const HttpServerPort = ":8080"
@@ -18,6 +19,7 @@ func ServerStart()  {
 	flag.StringVar(&conf.ConfigPath, "conf", "config.json", "Set the config file path.")
 	println(conf.ConfigPath)
 	err := conf.Load()
+	service.Load(conf.Conf)
 
 	if err != nil {
 		println("service config load failed")
