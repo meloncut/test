@@ -6,10 +6,27 @@ import (
 	"net/http"
 	"test/pay/app/payment"
 	"test/pay/app/payment/conf"
+	"test/pay/app/payment/https"
 	"test/pay/app/payment/service"
+	"time"
 )
 
 const HttpServerPort = ":8080"
+
+// -> interface http.Handler
+type CustomHandler struct {
+	r *chi.Mux
+}
+func NewCustomHandler() *CustomHandler {
+	a := &CustomHandler{
+		r:RegisterRoute(),
+	}
+	return a
+}
+
+func (agent *CustomHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)  {
+	agent.r.ServeHTTP(https.Response{Begin: time.Now(), ResponseWriter: w}, r)
+}
 
 func main()  {
 	ServerStart()
@@ -26,7 +43,7 @@ func ServerStart()  {
 		return
 	}
 	println("go server hello")
-	err = http.ListenAndServe(HttpServerPort, RegisterRoute())
+	err = http.ListenAndServe(HttpServerPort, NewCustomHandler())
 
 	if err != nil {
 		println("http server start error")
