@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 //Order Status
 const (
 	OrderWait = 1 //等待付款
@@ -24,9 +22,10 @@ type Order struct {
 	Amount int64 `db:"amount"` //财富数量
 	UnitPrice int64 `db:"unit_price"` //商品单价
 	Quantity int64 `db:"quantity"` //商品数量
-	CreatedAt time.Time `db:"created_at"`
-	PaidAt time.Time `db:"paid_at"`
-	CloseAt time.Time `db:"closed_at"`
+	CreatedAt []uint8 `db:"created_at"`
+	UpdatedAt []uint8 `db:"updated_at"`
+	PaidAt []uint8 `db:"paid_at"`
+	CloseAt []uint8 `db:"closed_at"`
 }
 
 //如果存在财富组合如(金币+银子)，则需要抽象出商品

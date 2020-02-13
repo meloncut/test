@@ -15,15 +15,15 @@ type WealthAccount struct {
 	WealthID int64 `db:"wealth_id"`
 	UserId int64 `db:"user_id"`
 	Amount int64 `db:"amount"`
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt time.Time `db:"updated_at"`
+	CreatedAt []uint8 `db:"created_at"`
+	UpdatedAt []uint8 `db:"updated_at"`
 }
 
 type Wealth struct {
 	ID int64 `db:"id"`
 	WealthName string `db:"wealth_name"`
 	WealthType string `db:"wealth_type"`
-	CreatedAt time.Time `db:"created_at"`
+	CreatedAt []uint8 `db:"created_at"`
 }
 
 type WealthLog struct {

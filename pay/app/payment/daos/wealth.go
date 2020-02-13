@@ -7,12 +7,13 @@ import (
 )
 
 const (
-	_wealthAccountGetSQL = "SELECT * FROM `wealth` WHERE `user_id` = ? AND `wealth_id` = ?"
+	_wealthAccountGetSQL = "SELECT * FROM `wealth_accounts` WHERE `user_id` = ? AND `wealth_id` = ?"
 	_wealthIncreaseSQL = "UPDATE `wealth_accounts` SET amount = amount+? WHERE id = ? AND amount = ?"
 )
 
 //充值操作
 func (d *Dao) Recharge(orderCode string) error {
+
 	order,err := d.GetOrderByCode(orderCode)
 	if err != nil {
 		return err
@@ -20,16 +21,25 @@ func (d *Dao) Recharge(orderCode string) error {
 	//如果已经发货,则什么都不做
 	if order.Status != models.OrderPaid {
 		switch order.Status {
-		case models.OrderDeliver:
-			{
-				log.ZLogger.Printf("order %s has delivered", orderCode)
-			}
-		default:
-			{
-				log.ZLogger.Printf("order %s status is illegal", orderCode)
-			}
+			case models.OrderWait:
+				{
+					err = d.UpdateOrderPaid(orderCode)
+					if err != nil {
+						return err
+					}
+					break
+				}
+			case models.OrderDeliver:
+				{
+					log.ZLogger.Printf("order %s has delivered", orderCode)
+					return nil
+				}
+			default:
+				{
+					log.ZLogger.Printf("order %s status is illegal", orderCode)
+					return nil
+				}
 		}
-		return nil
 	}
 
 	//获取到用户的财富账户

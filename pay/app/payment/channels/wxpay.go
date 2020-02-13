@@ -14,9 +14,9 @@ type WxReq struct {
 func (*WxReq) GetPayResult() PayResult {
 	return  PayResult{
 		PayType:WxPayType,
-		OrderCode:   "test-order",
-		TotalAmount: 1000,
-		PaidAmount:  800,
+		OrderCode:   "test-123123123",
+		TotalPrice: 1000,
+		PaidPrice:  800,
 		NotifyTime:  time.Now()}
 }
 

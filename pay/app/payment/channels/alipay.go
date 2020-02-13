@@ -14,9 +14,9 @@ type AliReq struct {
 func (*AliReq) GetPayResult() PayResult {
 	return  PayResult{
 		PayType:AlipayType,
-		OrderCode:   "test-order-123123123123",
-		TotalAmount: 1000,
-		PaidAmount:  800,
+		OrderCode:   "test-123123123",
+		TotalPrice: 1000,
+		PaidPrice:  800,
 		NotifyTime:  time.Now()}
 }
 
