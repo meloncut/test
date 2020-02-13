@@ -47,3 +47,15 @@ func (r Response) Error(code int, message string, err error) {
 	return
 }
 
+// Error 向 w 中写入 错误信息
+func (r Response) Fail(code int, message string, err error) {
+	resp := fmt.Sprintf(`{"code": %d, "message":"%s", "data":""}`, code, message)
+	// 设置response
+	r.Header().Set("X-Cost-Time", time.Now().Sub(r.Begin).String())
+	r.Header().Set("Content-Type", "application/json")
+	r.WriteHeader(http.StatusBadRequest)
+	r.Write([]byte(resp))
+
+	return
+}
+

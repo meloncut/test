@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	_wealthGetByUserIDSQL = "SELECT * FROM `wealth` WHERE `user_id` = ? AND `wealth_id` = ?"
-	_wealthIncreaseSQL = "UPDATE `wealth` SET amount = amount+? WHERE id = ? AND amount = ?"
+	_wealthAccountGetSQL = "SELECT * FROM `wealth` WHERE `user_id` = ? AND `wealth_id` = ?"
+	_wealthIncreaseSQL = "UPDATE `wealth_accounts` SET amount = amount+? WHERE id = ? AND amount = ?"
 )
 
 //充值操作
@@ -51,7 +51,7 @@ func (d *Dao) Recharge(orderCode string) error {
 //获取对应的财富账户
 func (d *Dao) GetWealthAccountByUserIDAndWealthID(userID int64, wealthID int64) (*models.WealthAccount, error){
 	wealthAccount := &models.WealthAccount{}
-	err := d.db.Get(wealthAccount,_wealthGetByUserIDSQL,userID,wealthID)
+	err := d.db.Get(wealthAccount,_wealthAccountGetSQL,userID,wealthID)
 	if err != nil {
 		return nil, err
 	}
