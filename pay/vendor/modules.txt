@@ -5,5 +5,9 @@ github.com/go-sql-driver/mysql
 # github.com/jmoiron/sqlx v1.2.0
 github.com/jmoiron/sqlx
 github.com/jmoiron/sqlx/reflectx
+# github.com/rs/zerolog v1.18.0
+github.com/rs/zerolog
+github.com/rs/zerolog/internal/cbor
+github.com/rs/zerolog/internal/json
 # google.golang.org/appengine v1.6.5
 google.golang.org/appengine/cloudsql

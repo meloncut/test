@@ -21,6 +21,7 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 	payResult := payReq.GetPayResult()
 
 	println(payResult.OrderCode)
+
 	w.Write([]byte("notify"))
 }
 
