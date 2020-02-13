@@ -10,6 +10,7 @@ const (
 	OrderClose = 4 //订单关闭
 	OrderWaitRefund = 5 //等待退款
 	OrderRefund = 6 //已退款
+	OrderDel = 7 //已删除
 )
 
 type Order struct {
@@ -24,9 +25,8 @@ type Order struct {
 	UnitPrice int64 `db:"unit_price"` //商品单价
 	Quantity int64 `db:"quantity"` //商品数量
 	CreatedAt time.Time `db:"created_at"`
-	PaidAt time.Time `db:"deleted_at"`
+	PaidAt time.Time `db:"paid_at"`
 	CloseAt time.Time `db:"closed_at"`
-	DeletedAt int64 `db:"closed_at"`
 }
 
 //如果存在财富组合如(金币+银子)，则需要抽象出商品

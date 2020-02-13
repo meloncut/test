@@ -23,6 +23,7 @@ type Wealth struct {
 	ID int64 `db:"id"`
 	WealthName string `db:"wealth_name"`
 	WealthType string `db:"wealth_type"`
+	CreatedAt time.Time `db:"created_at"`
 }
 
 type WealthLog struct {
