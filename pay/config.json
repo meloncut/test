@@ -1,5 +1,5 @@
 {
   "mysql": {
-    "dsn": "root:GN-001EXIA@tcp(127.0.0.1:3306)/test?charset=utf8"
+    "dsn": "root:7895123ny@tcp(127.0.0.1:3306)/trade?charset=utf8mb4"
   }
 }

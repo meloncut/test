@@ -3,7 +3,6 @@ package https
 import (
 	"fmt"
 	"net/http"
-	"test/pay/app/payment/log"
 	"time"
 )
 
@@ -20,7 +19,7 @@ func (r Response) OK() {
 	resp := `{"code": 0, "message":"success", "data":""}`
 
 	// 记录日志
-	log.ZLogger.Info().Str("sk_id", TrackId).Str("request end：response", resp).Msg("success")
+	//log.ZLogger.Info().Str("sk_id", TrackId).Str("request end：response", resp).Msg("success")
 
 	// 设置response
 	r.Header().Set("X-Cost-Time", time.Now().Sub(r.Begin).String())
@@ -36,7 +35,7 @@ func (r Response) Error(code int, message string, err error) {
 	resp := fmt.Sprintf(`{"code": %d, "message":"%s", "data":""}`, code, message)
 
 	// 记录日志
-	log.ZLogger.Info().Str("sk_id", TrackId).Err(err).Str("request end：response", resp).Msg("failed")
+	//log.ZLogger.Info().Str("sk_id", TrackId).Err(err).Str("request end：response", resp).Msg("failed")
 
 	// 设置response
 	r.Header().Set("X-Cost-Time", time.Now().Sub(r.Begin).String())

@@ -14,18 +14,19 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 	payReq,err := channels.RequestTransfer(r)
 
 	if err != nil {
-		w.WriteHeader(400)
-		w.Write([]byte(err.Error()))
+		w.(Response).Error(400,"illegal request params",err)
 		return
 	}
 
-	err = daos.PayDB.Recharge(payReq.GetPayResult().OrderCode)
+	payResult := payReq.GetPayResult()
+
+	err = daos.PayDB.Recharge(payResult.OrderCode)
 
 	if err != nil {
+		println(err.Error())
 		w.(Response).Fail(400,"deliver failed",err)
 	}
 
-	payResult := payReq.GetPayResult()
 
 	println(payResult.OrderCode)
 
