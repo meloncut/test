@@ -12,7 +12,7 @@ const (
 )
 
 type Order struct {
-	ID int64 `"db":id`
+	ID int64 `db:"id"`
 	OrderCode string `db:"order_code"` //订单号
 	UserID int64 `db:"user_id"`
 	OriginalPrice int64 `db:"original_price"` //原价

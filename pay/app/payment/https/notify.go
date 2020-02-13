@@ -5,11 +5,6 @@ import (
 	"test/pay/app/payment/channels"
 	"test/pay/app/payment/daos"
 )
-
-type NotifyReq interface {
-
-}
-
 func Notify(w http.ResponseWriter, r *http.Request) {
 	payReq,err := channels.RequestTransfer(r)
 
