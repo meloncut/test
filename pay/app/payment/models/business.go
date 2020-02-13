@@ -12,26 +12,28 @@ const (
 	OrderRefund = 6 //已退款
 )
 
-type order struct {
-	ID int64
-	OrderCode string //订单号
-	OriginalPrice int64 //原价
-	ReceiptAmount int64 //实收
-	Status 	int8 //状态
-	ProductId int64 //商品ID
-	UnitPrice int64 //商品单价
-	PQuantity int64 //商品数量
-	CreatedAt time.Time
-	PaidAt time.Time
-	CloseAt time.Time
-	DeletedAt int64
+type Order struct {
+	ID int64 `"db":id`
+	OrderCode string `db:"order_code"` //订单号
+	UserID int64 `db:"user_id"`
+	OriginalPrice int64 `db:"original_price"` //原价
+	ReceiptAmount int64 `db:"receipt_amount"` //实收
+	Status 	int8 `db:"status"` //状态
+	WealthID int64 `db:"wealth_id"` //财富ID
+	Amount int64 `db:"amount"` //财富数量
+	UnitPrice int64 `db:"unit_price"` //商品单价
+	Quantity int64 `db:"quantity"` //商品数量
+	CreatedAt time.Time `db:"created_at"`
+	PaidAt time.Time `db:"deleted_at"`
+	CloseAt time.Time `db:"closed_at"`
+	DeletedAt int64 `db:"closed_at"`
 }
 
-
-
-type product struct {
-	ID int64
-	Name string
-	UnitPrice int64
-	ProductType int8
-}
+//如果存在财富组合如(金币+银子)，则需要抽象出商品
+//type Product struct {
+//	ID int64
+//	Name string
+//	UnitPrice int64
+//	ProductType int8
+//	WealthData string
+//}
