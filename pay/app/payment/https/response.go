@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var TrackId string
+//var TrackId string
 
 // Response 回复代理
 type Response struct {
