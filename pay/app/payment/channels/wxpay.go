@@ -24,6 +24,7 @@ type ResultData struct {
 	ReturnMsg CDATA  `xml:"return_msg"`
 }
 func (*WxChannel) GetPayResult() PayResult {
+	//TODO
 	return  PayResult{
 		PayType:WxPayType,
 		OrderCode:   "test-123123123",

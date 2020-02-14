@@ -13,6 +13,7 @@ type AliChannel struct {
 }
 
 func (*AliChannel) GetPayResult() PayResult {
+	//TODO
 	return  PayResult{
 		PayType:AlipayType,
 		OrderCode:   "test-123123123",
@@ -22,6 +23,7 @@ func (*AliChannel) GetPayResult() PayResult {
 }
 
 func (*AliChannel) ResponsePaySuccess(w http.ResponseWriter)  {
+	//TODO
 	w.WriteHeader(200)
 	_,_ = w.Write([]byte("success"))
 }
