@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/go-chi/chi"
+	"log"
 	"net/http"
 	"test/pay/app/payment"
 	"test/pay/app/payment/conf"
@@ -38,12 +39,14 @@ func ServerStart()  {
 	err := conf.Load()
 	service.Load(conf.Conf)
 
-	if err != nil {
-		println("service config load failed")
-		return
-	}
 	println("go server hello")
-	err = http.ListenAndServe(HttpServerPort, NewCustomHandler())
+	go func() {
+		if err != nil {
+			log.Fatalln("http listen failed", err)
+			return
+		}
+		err = http.ListenAndServe(HttpServerPort, NewCustomHandler())
+	}()
 
 	if err != nil {
 		println("http server start error")

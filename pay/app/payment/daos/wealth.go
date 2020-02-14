@@ -74,26 +74,28 @@ func (d *Dao) deliver(wealthAccount *models.WealthAccount, order *models.Order) 
 	if err != nil {
 		return err
 	}
-	//更新财富账户数据
-	result,err := trans.Exec(_wealthIncreaseSQL,order.Amount,wealthAccount.ID,wealthAccount.Amount)
+	//更新订单状态为已发货
+	result,err := trans.Exec(_orderStatusUpdateSQL,models.OrderDeliver,order.OrderCode,models.OrderPaid)
 	if err != nil{
-		err := trans.Rollback()
+		_ = trans.Rollback()
 		return err
 	}
 	effect,err := result.RowsAffected()
 	if effect != 1 || err != nil {
-		return  errors.New("deliver failed when update the wealth account")
+		_ = trans.Rollback()
+		return  errors.New("deliver failed when update the order")
 	}
 
-	//更新订单状态为已发货
-	result,err = trans.Exec(_orderStatusUpdateSQL,models.OrderDeliver,order.OrderCode,models.OrderPaid)
+	//更新财富账户数据
+	result,err = trans.Exec(_wealthIncreaseSQL,order.Amount,wealthAccount.ID,wealthAccount.Amount)
 	if err != nil{
-		err := trans.Rollback()
+		_ = trans.Rollback()
 		return err
 	}
 	effect,err = result.RowsAffected()
 	if effect != 1 || err != nil {
-		return  errors.New("deliver failed when update the order")
+		_ = trans.Rollback()
+		return  errors.New("deliver failed when update the wealth account")
 	}
 
 	err = trans.Commit()
