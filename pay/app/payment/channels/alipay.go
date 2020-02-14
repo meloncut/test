@@ -8,7 +8,7 @@ import (
 
 const AlipayType = "alipay"
 
-//implement PayReq
+//->interface PayChannel
 type AliChannel struct {
 	Values url.Values//测试
 }

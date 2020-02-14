@@ -8,7 +8,7 @@ import (
 
 const WxPayType = "wxpay"
 
-//implement PayReq
+//->interface PayChannel
 type WxChannel struct {
 	Content []byte //测试
 	http.ResponseWriter
