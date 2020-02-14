@@ -70,37 +70,33 @@ func (d *Dao) GetWealthAccountByUserIDAndWealthID(userID int64, wealthID int64) 
 
 //发货数据库操作
 func (d *Dao) deliver(wealthAccount *models.WealthAccount, order *models.Order) error {
-	trans,err := d.db.Begin()
-	if err != nil {
-		return err
-	}
 	//更新订单状态为已发货
-	result,err := trans.Exec(_orderStatusUpdateSQL,models.OrderDeliver,order.OrderCode,models.OrderPaid)
+	result,err := d.db.Exec(_orderStatusUpdateSQL,models.OrderDeliver,order.OrderCode,models.OrderPaid)
 	if err != nil{
-		_ = trans.Rollback()
 		return err
 	}
 	effect,err := result.RowsAffected()
 	if effect != 1 || err != nil {
-		_ = trans.Rollback()
 		return  errors.New("deliver failed when update the order")
 	}
 
 	//更新财富账户数据
-	result,err = trans.Exec(_wealthIncreaseSQL,order.Amount,wealthAccount.ID,wealthAccount.Amount)
+	result,err = d.db.Exec(_wealthIncreaseSQL,order.Amount,wealthAccount.ID,wealthAccount.Amount)
 	if err != nil{
-		_ = trans.Rollback()
+		result,err = d.db.Exec(_orderStatusUpdateSQL,models.OrderPaid,order.OrderCode,models.OrderDeliver)
+		if err != nil{
+			return errors.New("failed when rollback order status to paid")
+		}
+		effect,err = result.RowsAffected()
+		if effect != 1 || err != nil {
+			return  errors.New("failed when rollback order status to paid")
+		}
+
 		return err
 	}
 	effect,err = result.RowsAffected()
 	if effect != 1 || err != nil {
-		_ = trans.Rollback()
 		return  errors.New("deliver failed when update the wealth account")
-	}
-
-	err = trans.Commit()
-	if err != nil {
-		return err
 	}
 
 	return nil

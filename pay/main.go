@@ -5,8 +5,12 @@ import (
 	"github.com/go-chi/chi"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"test/pay/app/payment"
 	"test/pay/app/payment/conf"
+	"test/pay/app/payment/daos"
 	"test/pay/app/payment/https"
 	"test/pay/app/payment/service"
 	"time"
@@ -40,17 +44,42 @@ func ServerStart()  {
 	service.Load(conf.Conf)
 
 	println("go server hello")
+
+	server := &http.Server{
+		Addr:    HttpServerPort,
+		Handler: NewCustomHandler(),
+	}
+
 	go func() {
+		err = server.ListenAndServe()
 		if err != nil {
 			log.Fatalln("http listen failed", err)
 			return
 		}
-		err = http.ListenAndServe(HttpServerPort, NewCustomHandler())
 	}()
 
-	if err != nil {
-		println("http server start error")
-	}
+	// 信号量监听
+	sigs := make(chan os.Signal, 1)
+	done := make(chan bool, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGHUP)
+	go func() {
+		log.Println("Signaler running")
+		sig := <-sigs
+
+		log.Println("Receive a signal：" + sig.String())
+
+		// 退出http
+		_ = server.Close()
+
+		// 释放config数据库资源
+		daos.PayDB.Close()
+
+		done <- true
+	}()
+	time.Sleep(10 * time.Millisecond)
+	log.Println("service ready")
+	<-done
+	log.Println("service exit")
 }
 
 func RegisterRoute() *chi.Mux{
@@ -58,7 +87,7 @@ func RegisterRoute() *chi.Mux{
 
 	//heath check
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world"))
+		_,_ = w.Write([]byte("trade"))
 	})
 
 	r.Route("/api", func(r chi.Router) {
