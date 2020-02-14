@@ -23,7 +23,7 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 	}
 	println(payResult.OrderCode)
 
-	payChannel.ResponsePaySuccess()
+	payChannel.ResponsePaySuccess(w)
 }
 
 

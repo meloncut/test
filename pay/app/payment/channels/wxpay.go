@@ -19,6 +19,7 @@ type CDATA struct {
 }
 
 type ResultData struct {
+	XMLName    xml.Name `xml:"xml"`
 	ReturnCode CDATA `xml:"return_code"`
 	ReturnMsg CDATA  `xml:"return_msg"`
 }
@@ -31,14 +32,14 @@ func (*WxChannel) GetPayResult() PayResult {
 		NotifyTime:  time.Now()}
 }
 
-func (c *WxChannel) ResponsePaySuccess()  {
+func (*WxChannel) ResponsePaySuccess(w http.ResponseWriter)  {
 	msg := ResultData{
 		ReturnCode:CDATA{"SUCCESS"},
 		ReturnMsg:CDATA{"OK"},
 	}
-	c.WriteHeader(200)
-	c.Header().Set("Content-type","application/xml")
+	w.WriteHeader(200)
+	w.Header().Set("Content-type","application/xml")
 	ctx,_ := xml.Marshal(msg)
-	_,_ = c.Write(ctx)
+	_,_ = w.Write(ctx)
 }
 

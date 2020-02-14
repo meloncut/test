@@ -13,7 +13,7 @@ const (
 
 type PayChannel interface {
 	GetPayResult() PayResult
-	ResponsePaySuccess()
+	ResponsePaySuccess(w http.ResponseWriter)
 }
 
 //请求转换到相应的渠道
@@ -25,11 +25,11 @@ func Transfer(r *http.Request) (PayChannel, error) {
 	//辨别支付渠道,返回相应的request
 	switch r.Header.Get("Content-Type") {
 		case ContentXML:{
-			req := &AliChannel{Content:content}
+			req := &WxChannel{Content:content}
 			return req,nil
 		}
 		case ContentJson:{
-			req := &WxChannel{Content:content}
+			req := &AliChannel{Content:content}
 			return req,nil
 		}
 		default:{

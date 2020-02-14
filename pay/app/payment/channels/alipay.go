@@ -10,7 +10,6 @@ const AlipayType = "alipay"
 //implement PayReq
 type AliChannel struct {
 	Content []byte //测试
-	http.ResponseWriter
 }
 
 func (*AliChannel) GetPayResult() PayResult {
@@ -22,7 +21,7 @@ func (*AliChannel) GetPayResult() PayResult {
 		NotifyTime:  time.Now()}
 }
 
-func (c *AliChannel) ResponsePaySuccess()  {
-	c.WriteHeader(200)
-	_,_ = c.Write([]byte("success"))
+func (*AliChannel) ResponsePaySuccess(w http.ResponseWriter)  {
+	w.WriteHeader(200)
+	_,_ = w.Write([]byte("success"))
 }
