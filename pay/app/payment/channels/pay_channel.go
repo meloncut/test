@@ -22,17 +22,17 @@ func Transfer(r *http.Request) (PayChannel, error) {
 	if err != nil {
 		return nil,errors.New("illegal request,request body err")
 	}
+	v := r.URL.Query()
+	if v != nil {
+		req := &AliChannel{Values:v}
+		return req,nil
+	}
 	//辨别支付渠道,返回相应的request
 	switch r.Header.Get("Content-Type") {
 		case ContentXML:{
 			req := &WxChannel{Content:content}
 			return req,nil
 		}
-		//TODO 支付宝为Post请求
-		//case ContentJson:{
-		//	req := &AliChannel{Content:content}
-		//	return req,nil
-		//}
 		default:{
 			return nil,errors.New("illegal request, unknown payment channel")
 		}

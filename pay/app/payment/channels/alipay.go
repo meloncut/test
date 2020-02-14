@@ -2,6 +2,7 @@ package channels
 
 import (
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -9,7 +10,7 @@ const AlipayType = "alipay"
 
 //implement PayReq
 type AliChannel struct {
-	Content []byte //测试
+	Values url.Values//测试
 }
 
 func (*AliChannel) GetPayResult() PayResult {
