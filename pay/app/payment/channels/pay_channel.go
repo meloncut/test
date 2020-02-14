@@ -28,10 +28,11 @@ func Transfer(r *http.Request) (PayChannel, error) {
 			req := &WxChannel{Content:content}
 			return req,nil
 		}
-		case ContentJson:{
-			req := &AliChannel{Content:content}
-			return req,nil
-		}
+		//TODO 支付宝为Post请求
+		//case ContentJson:{
+		//	req := &AliChannel{Content:content}
+		//	return req,nil
+		//}
 		default:{
 			return nil,errors.New("illegal request, unknown payment channel")
 		}
