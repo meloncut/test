@@ -25,7 +25,7 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 
 	println(payResult.OrderCode)
 
-	w.(Response).OK()
+	_,_ = w.Write([]byte("success"))
 }
 
 
