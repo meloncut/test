@@ -11,12 +11,13 @@ const (
 	ContentXML = "application/xml"
 )
 
-type PayReq interface {
+type PayChannel interface {
 	GetPayResult() PayResult
+	ResponsePaySuccess()
 }
 
 //请求转换到相应的渠道
-func RequestTransfer(r *http.Request) (PayReq, error) {
+func Transfer(r *http.Request) (PayChannel, error) {
 	content,err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil,errors.New("illegal request,request body err")
@@ -24,11 +25,11 @@ func RequestTransfer(r *http.Request) (PayReq, error) {
 	//辨别支付渠道,返回相应的request
 	switch r.Header.Get("Content-Type") {
 		case ContentXML:{
-			req := &AliReq{Content:content}
+			req := &AliChannel{Content:content}
 			return req,nil
 		}
 		case ContentJson:{
-			req := &WxReq{Content:content}
+			req := &WxChannel{Content:content}
 			return req,nil
 		}
 		default:{

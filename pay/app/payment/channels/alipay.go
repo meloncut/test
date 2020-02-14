@@ -1,17 +1,19 @@
 package channels
 
 import (
+	"net/http"
 	"time"
 )
 
 const AlipayType = "alipay"
 
 //implement PayReq
-type AliReq struct {
+type AliChannel struct {
 	Content []byte //测试
+	http.ResponseWriter
 }
 
-func (*AliReq) GetPayResult() PayResult {
+func (*AliChannel) GetPayResult() PayResult {
 	return  PayResult{
 		PayType:AlipayType,
 		OrderCode:   "test-123123123",
@@ -20,6 +22,7 @@ func (*AliReq) GetPayResult() PayResult {
 		NotifyTime:  time.Now()}
 }
 
-//func DecodeRequest(ctx []byte) gjson.Result {
-//
-//}
+func (c *AliChannel) ResponsePaySuccess()  {
+	c.WriteHeader(200)
+	_,_ = c.Write([]byte("success"))
+}

@@ -6,14 +6,14 @@ import (
 	"test/pay/app/payment/daos"
 )
 func Notify(w http.ResponseWriter, r *http.Request) {
-	payReq,err := channels.RequestTransfer(r)
+	payChannel,err := channels.Transfer(r)
 
 	if err != nil {
 		w.(Response).Error(400,"illegal request params",err)
 		return
 	}
 
-	payResult := payReq.GetPayResult()
+	payResult := payChannel.GetPayResult()
 
 	err = daos.PayDB.Recharge(payResult.OrderCode)
 
@@ -21,11 +21,9 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 		println(err.Error())
 		w.(Response).Fail(400,"deliver failed",err)
 	}
-
-
 	println(payResult.OrderCode)
 
-	_,_ = w.Write([]byte("success"))
+	payChannel.ResponsePaySuccess()
 }
 
 
