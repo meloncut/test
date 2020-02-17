@@ -3,7 +3,7 @@ package https
 import (
 	"net/http"
 	"test/pay/app/payment/channels"
-	"test/pay/app/payment/daos"
+	"test/pay/app/payment/service"
 )
 func Notify(w http.ResponseWriter, r *http.Request) {
 	payChannel,err := channels.Transfer(r)
@@ -15,7 +15,7 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 
 	payResult := payChannel.GetPayResult()
 
-	err = daos.PayDB.Recharge(payResult.OrderCode)
+	err = service.Recharge(payResult.OrderCode)
 
 	if err != nil {
 		println(err.Error())

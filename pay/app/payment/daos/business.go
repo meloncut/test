@@ -20,18 +20,17 @@ func (d *Dao) GetOrderByCode(orderCode string) (*models.Order, error) {
 	return order,nil
 }
 
-//更新订单状态为已付款
-func (d *Dao) UpdateOrderPaid(orderCode string) error {
-	result,err := d.db.Exec(_orderStatusUpdateSQL,models.OrderPaid,orderCode,models.OrderWait)
+//更新订单状态 从某状态到某状态
+func (d *Dao) UpdateOrderStatus(orderCode string, from int, to int) error  {
+	result,err := d.db.Exec(_orderStatusUpdateSQL,to,orderCode,from)
 	if  err != nil{
-		return errors.New("deliver failed when update the order status to paid")
+		return errors.New(fmt.Sprintf("failed when update the order status from %d to %d",from,to))
 	}
 	effect,err := result.RowsAffected()
 	if effect != 1 {
 		fmt.Printf("%d effect",effect)
-		return errors.New("deliver failed when update the order status to paid")
+		return errors.New(fmt.Sprintf("failed when update the order status from %d to %d",from,to))
 	}
-
 
 	return nil
 }

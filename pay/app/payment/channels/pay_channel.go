@@ -18,14 +18,14 @@ type PayChannel interface {
 
 //请求转换到相应的渠道
 func Transfer(r *http.Request) (PayChannel, error) {
-	content,err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return nil,errors.New("illegal request,request body err")
-	}
 	v := r.URL.Query()
 	if v != nil {
 		req := &AliChannel{Values:v}
 		return req,nil
+	}
+	content,err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return nil,errors.New("illegal request,request body err")
 	}
 	//辨别支付渠道,返回相应的request
 	switch r.Header.Get("Content-Type") {

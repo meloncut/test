@@ -2,7 +2,7 @@ package daos
 
 import (
 	"errors"
-	"test/pay/app/payment/log"
+	"fmt"
 	"test/pay/app/payment/models"
 )
 
@@ -10,53 +10,6 @@ const (
 	_wealthAccountGetSQL = "SELECT * FROM `wealth_accounts` WHERE `user_id` = ? AND `wealth_id` = ?"
 	_wealthIncreaseSQL = "UPDATE `wealth_accounts` SET amount = amount+? WHERE id = ? AND amount = ?"
 )
-
-//充值操作
-func (d *Dao) Recharge(orderCode string) error {
-
-	order,err := d.GetOrderByCode(orderCode)
-	if err != nil {
-		return err
-	}
-	//如果已经发货,则什么都不做
-	if order.Status != models.OrderPaid {
-		switch order.Status {
-			case models.OrderWait:
-				{
-					err = d.UpdateOrderPaid(orderCode)
-					if err != nil {
-						return err
-					}
-					break
-				}
-			case models.OrderDeliver:
-				{
-					log.ZLogger.Printf("order %s has delivered", orderCode)
-					return nil
-				}
-			default:
-				{
-					log.ZLogger.Printf("order %s status is illegal", orderCode)
-					return nil
-				}
-		}
-	}
-
-	//获取到用户的财富账户
-	wealthAccount,err := d.GetWealthAccountByUserIDAndWealthID(order.UserID,order.WealthID)
-	if err != nil {
-		return err
-	}
-
-	//开始发货
-	err = d.deliver(wealthAccount, order)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
 
 //获取对应的财富账户
 func (d *Dao) GetWealthAccountByUserIDAndWealthID(userID int64, wealthID int64) (*models.WealthAccount, error){
@@ -68,37 +21,21 @@ func (d *Dao) GetWealthAccountByUserIDAndWealthID(userID int64, wealthID int64) 
 	return wealthAccount, nil
 }
 
-//发货数据库操作
-func (d *Dao) deliver(wealthAccount *models.WealthAccount, order *models.Order) error {
-	//更新订单状态为已发货
-	result,err := d.db.Exec(_orderStatusUpdateSQL,models.OrderDeliver,order.OrderCode,models.OrderPaid)
+//财富账户增加财富
+func (d *Dao) UpdateWealthAccountIncrease(wealthAccount *models.WealthAccount, increaseAmount int64) error {
+	result,err := d.db.Exec(_wealthIncreaseSQL,increaseAmount,wealthAccount.ID,wealthAccount.Amount)
 	if err != nil{
 		return err
 	}
 	effect,err := result.RowsAffected()
 	if effect != 1 || err != nil {
-		return  errors.New("deliver failed when update the order")
+		return  errors.New(fmt.Sprintf(
+			"failed when update the wealth account (id %d) from %d to %d",
+			wealthAccount.ID,
+			wealthAccount.Amount,
+			wealthAccount.Amount+increaseAmount,
+			))
 	}
-
-	//更新财富账户数据
-	result,err = d.db.Exec(_wealthIncreaseSQL,order.Amount,wealthAccount.ID,wealthAccount.Amount)
-	if err != nil{
-		result,err = d.db.Exec(_orderStatusUpdateSQL,models.OrderPaid,order.OrderCode,models.OrderDeliver)
-		if err != nil{
-			return errors.New("failed when rollback order status to paid")
-		}
-		effect,err = result.RowsAffected()
-		if effect != 1 || err != nil {
-			return  errors.New("failed when rollback order status to paid")
-		}
-
-		return err
-	}
-	effect,err = result.RowsAffected()
-	if effect != 1 || err != nil {
-		return  errors.New("deliver failed when update the wealth account")
-	}
-
 	return nil
 }
 
