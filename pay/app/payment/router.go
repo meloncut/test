@@ -9,7 +9,7 @@ func Routes() *chi.Mux {
 	router := chi.NewRouter()
 
 	// /api/payment/notify
-	router.HandleFunc("/notify/*", https.Notify)
+	router.HandleFunc("/notify/{payType}", https.Notify)
 
 
 	return router

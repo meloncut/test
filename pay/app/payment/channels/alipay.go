@@ -2,18 +2,20 @@ package channels
 
 import (
 	"net/http"
-	"net/url"
 	"time"
 )
 
-const AlipayType = "alipay"
 
 //->interface PayChannel
 type AliChannel struct {
-	Values url.Values//测试
+	request *http.Request
+	responseWriter http.ResponseWriter
 }
 
-func (*AliChannel) GetPayResult() PayResult {
+func (c *AliChannel) GetPayResult() PayResult {
+	err := c.request.ParseForm()
+
+
 	//TODO
 	return  PayResult{
 		PayType:AlipayType,
@@ -23,8 +25,15 @@ func (*AliChannel) GetPayResult() PayResult {
 		NotifyTime:  time.Now()}
 }
 
-func (*AliChannel) ResponsePaySuccess(w http.ResponseWriter)  {
+func (c *AliChannel) ResponsePaySuccess()  {
 	//TODO
-	w.WriteHeader(200)
-	_,_ = w.Write([]byte("success"))
+	c.responseWriter.WriteHeader(200)
+	_,_ = c.responseWriter.Write([]byte("success"))
 }
+
+func (c *AliChannel) ResponsePayFail(message string)  {
+	//TODO
+	c.responseWriter.WriteHeader(400)
+	_,_ = c.responseWriter.Write([]byte("fail"))
+}
+

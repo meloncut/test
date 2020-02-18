@@ -10,8 +10,8 @@ const WxPayType = "wxpay"
 
 //->interface PayChannel
 type WxChannel struct {
-	Content []byte //测试
-	http.ResponseWriter
+	request *http.Request
+	responseWriter http.ResponseWriter
 }
 
 type CDATA struct {
@@ -33,14 +33,25 @@ func (*WxChannel) GetPayResult() PayResult {
 		NotifyTime:  time.Now()}
 }
 
-func (*WxChannel) ResponsePaySuccess(w http.ResponseWriter)  {
+func (c *WxChannel) ResponsePaySuccess()  {
 	msg := ResultData{
 		ReturnCode:CDATA{"SUCCESS"},
 		ReturnMsg:CDATA{"OK"},
 	}
-	w.WriteHeader(200)
-	w.Header().Set("Content-type","application/xml")
+	c.responseWriter.WriteHeader(200)
+	c.responseWriter.Header().Set("Content-type","application/xml")
 	ctx,_ := xml.Marshal(msg)
-	_,_ = w.Write(ctx)
+	_,_ = c.responseWriter.Write(ctx)
 }
 
+func (c *WxChannel) ResponsePayFail(message string) {
+	msg := ResultData{
+		ReturnCode:CDATA{"FAIL"},
+		ReturnMsg:CDATA{message},
+	}
+
+	c.responseWriter.WriteHeader(400)
+	c.responseWriter.Header().Set("Content-type","application/xml")
+	ctx,_ := xml.Marshal(msg)
+	_,_ = c.responseWriter.Write(ctx)
+}

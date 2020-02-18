@@ -6,10 +6,10 @@ import (
 	"test/pay/app/payment/service"
 )
 func Notify(w http.ResponseWriter, r *http.Request) {
-	payChannel,err := channels.Transfer(r)
+	payChannel,err := channels.Transfer(r,w)
 
 	if err != nil {
-		w.(Response).Error(400,"illegal request params",err)
+		w.(Response).Error(400,"illegal payment channel",err)
 		return
 	}
 
@@ -19,11 +19,11 @@ func Notify(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		println(err.Error())
-		w.(Response).Fail(400,"deliver failed",err)
+		payChannel.ResponsePayFail("recharge failed")
 	}
 	println(payResult.OrderCode)
 
-	payChannel.ResponsePaySuccess(w)
+	payChannel.ResponsePaySuccess()
 }
 
 
