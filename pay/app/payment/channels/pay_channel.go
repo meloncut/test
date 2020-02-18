@@ -20,11 +20,6 @@ type PayChannel interface {
 //请求转换到相应的渠道
 func Transfer(r *http.Request, w http.ResponseWriter) (PayChannel, error) {
 	payType := chi.URLParam(r, "payType")
-	v := r.URL.Query()
-	if v != nil {
-		channel := &AliChannel{request:r,responseWriter:w,}
-		return channel,nil
-	}
 	//辨别支付渠道
 	switch payType {
 	case WxpayType:{
