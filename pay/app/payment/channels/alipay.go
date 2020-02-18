@@ -13,9 +13,7 @@ type AliChannel struct {
 }
 
 func (c *AliChannel) GetPayResult() PayResult {
-	err := c.request.ParseForm()
-
-
+	p := c.paramsAnalysis()
 	//TODO
 	return  PayResult{
 		PayType:AlipayType,
@@ -23,6 +21,12 @@ func (c *AliChannel) GetPayResult() PayResult {
 		TotalPrice: 1000,
 		PaidPrice:  800,
 		NotifyTime:  time.Now()}
+}
+
+func (c *AliChannel) paramsAnalysis() map[string]string {
+	var params map[string]string
+	//..解析参数 验签
+	return params
 }
 
 func (c *AliChannel) ResponsePaySuccess()  {
